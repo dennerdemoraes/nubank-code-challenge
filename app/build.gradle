@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'br.com.nubank.App'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.google.inject', name: 'guice', version: '5.0.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.3'
+    implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.13.Final'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testImplementation 'org.assertj:assertj-core:3.19.0'
+    testImplementation "org.mockito:mockito-inline:3.+"
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation 'com.google.guava:guava:30.0-jre'
+}
+
+application {
+    mainClassName = 'br.com.nubank.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
