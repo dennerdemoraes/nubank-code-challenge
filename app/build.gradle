@@ -18,6 +18,8 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.3'
     implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.13.Final'
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    implementation group: 'org.glassfish', name: 'javax.el', version: '3.0.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testImplementation 'org.assertj:assertj-core:3.19.0'

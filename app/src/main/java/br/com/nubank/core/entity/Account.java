@@ -1,11 +1,15 @@
 package br.com.nubank.core.entity;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Account {
+    @NotNull
     @JsonProperty(value = "active-card")
     private Boolean activeCard;
 
+    @NotNull
     @JsonProperty(value = "available-limit")
     private Integer availableLimit;
 

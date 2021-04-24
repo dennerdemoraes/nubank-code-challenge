@@ -17,11 +17,8 @@ public class FileReader {
         this.authorizerUseCase = authorizerUseCase;
     }
 
-    public void readArgs(String... args) throws Exception {
-        if (args.length == 0)
-            throw new Exception("it's missing required argument");
-
-        try (var stream = Files.lines(Paths.get(args[0]))) {
+    public void read(String file) throws Exception {
+        try (var stream = Files.lines(Paths.get(file))) {
             stream.forEach(authorizerUseCase::execute);
         } catch (IOException e) {
             throw new Exception("invalid argument");
