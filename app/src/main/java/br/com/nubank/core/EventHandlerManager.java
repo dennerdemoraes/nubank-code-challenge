@@ -22,9 +22,11 @@ public class EventHandlerManager {
 
     public void setEventHandler(EventType eventType) {
         switch (eventType) {
+
             case ACCOUNT:
                 useCase = new AccountEventHandlerUseCase(accountManager);
                 break;
+
             case TRANSACTION:
                 useCase = new TransactionEventHandlerUseCase(accountManager);
                 break;

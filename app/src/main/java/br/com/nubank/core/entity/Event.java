@@ -4,6 +4,8 @@ public abstract class Event<T> {
     private EventType type;
 
     public abstract T getPayload();
+
+    public abstract boolean isValid();
     
     public EventType getType() {
         return type;

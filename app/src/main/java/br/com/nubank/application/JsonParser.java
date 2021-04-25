@@ -28,7 +28,6 @@ public interface JsonParser {
     static ObjectMapper objectMapper() {
         return new JsonMapper()
                 .registerModule(new JavaTimeModule())
-                .enable(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES)
                 .enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);

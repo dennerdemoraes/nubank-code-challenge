@@ -41,11 +41,8 @@ public class AccountManager {
 
     public List<Transaction> getLastTransactionsByMerchant(String merchant, Integer amount, ZonedDateTime time) {
         return transactions.stream()
-            .filter((transaction) -> 
-                transaction.getTime().isBefore(ChronoZonedDateTime.from(time)) 
-                && transaction.getTime().isAfter(ChronoZonedDateTime.from(time.minusMinutes(2)))
-            )
-            .filter((transaction) -> transaction.getMerchant() == merchant && transaction.getAmount() == amount)
+            .filter((transaction) -> transaction.getTime().isBefore(ChronoZonedDateTime.from(time)) && transaction.getTime().isAfter(ChronoZonedDateTime.from(time.minusMinutes(2))))
+            .filter((transaction) -> transaction.getMerchant().equals(merchant) && transaction.getAmount().equals(amount))
             .collect(Collectors.toList());
     }
 }

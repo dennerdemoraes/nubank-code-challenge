@@ -51,14 +51,17 @@ public class EventFileReader {
         eventTypes.add(new AccountEvent());
         eventTypes.add(new TransactionEvent());
 
-        var iterator = eventTypes.iterator();
-
         Event<?> event = null;
+        
+        var iterator = eventTypes.iterator();
         while (iterator.hasNext()) {
             event = JsonParser.parseJsonToObject(stream, iterator.next().getClass());
 
-            if (Objects.nonNull(event))
+            if (Objects.nonNull(event) && event.isValid()) {
                 break;
+            }
+
+            event = null;
         }
 
         return event;

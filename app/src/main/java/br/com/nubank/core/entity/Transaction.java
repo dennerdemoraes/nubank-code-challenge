@@ -2,9 +2,16 @@ package br.com.nubank.core.entity;
 
 import java.time.ZonedDateTime;
 
+import javax.validation.constraints.NotNull;
+
 public class Transaction {
+    @NotNull
     private String merchant;
+
+    @NotNull
     private Integer amount;
+
+    @NotNull
     private ZonedDateTime time;
 
     public Transaction() {}

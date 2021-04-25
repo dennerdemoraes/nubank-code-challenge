@@ -23,14 +23,12 @@ public class AccountEventHandlerUseCase implements EventHandlerUseCase {
     @Override
     public AccountState execute(Event<?> event) {
         var account = (Account) event.getPayload();
-        var accountState = new AccountState(account, new ArrayList<>());
 
         if (Objects.isNull(accountManager.getAccount())) {
             accountManager.setAccount(account);
-            return accountState;
+            return new AccountState(account, new ArrayList<>());
         }
 
-        accountState.setViolations(Collections.singletonList("account-already-initialized"));
-        return accountState;
+        return new AccountState(account, Collections.singletonList("account-already-initialized"));
     }
 }

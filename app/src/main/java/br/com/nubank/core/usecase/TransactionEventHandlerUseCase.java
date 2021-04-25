@@ -29,8 +29,6 @@ public class TransactionEventHandlerUseCase implements EventHandlerUseCase {
     public AccountState execute(Event<?> event) {
         var transaction = (Transaction) event.getPayload();
         var account = accountManager.getAccount();
-        
-        var violations = new ArrayList<String>();
 
         var rules = new ArrayList<Rule>();
         rules.add(new AccountNotInitializedRule());
@@ -38,7 +36,8 @@ public class TransactionEventHandlerUseCase implements EventHandlerUseCase {
         rules.add(new InsuficientLimitRule());
         rules.add(new HighFrequencySmallIntervalRule());
         rules.add(new DoubleTransactionRule());
-
+        
+        var violations = new ArrayList<String>();
         for (Rule rule : rules) {
             var error = rule.execute(account, transaction, accountManager);
 
