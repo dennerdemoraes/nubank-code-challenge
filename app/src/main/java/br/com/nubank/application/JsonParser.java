@@ -1,5 +1,6 @@
 package br.com.nubank.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,6 +13,14 @@ public interface JsonParser {
         try {
             return objectMapper().readValue(json, clazz);
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    static String parseObjectToJson(Object object) {
+        try {
+            return objectMapper().writeValueAsString(object);
+        } catch (JsonProcessingException e) {
             return null;
         }
     }

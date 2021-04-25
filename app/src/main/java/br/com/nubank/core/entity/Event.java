@@ -1,29 +1,15 @@
 package br.com.nubank.core.entity;
 
-public class Event {
+public abstract class Event<T> {
     private EventType type;
-    private Account account;
-    private Transaction transaction;
 
+    public abstract T getPayload();
+    
     public EventType getType() {
         return type;
     }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-        this.type = EventType.ACCOUNT;
-    }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-        this.type = EventType.TRANSACTION;
+    public void setType(EventType type) {
+        this.type = type;
     }
 }
