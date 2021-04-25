@@ -1,40 +1,65 @@
-// package br.com.nubank.entrypoint;
+package br.com.nubank.entrypoint;
 
-// import org.junit.jupiter.api.DisplayName;
-// import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-// import br.com.nubank.core.usecase.AuthorizerUseCase;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
-// import static org.assertj.core.api.Assertions.assertThat;
-// import static org.junit.jupiter.api.Assertions.assertThrows;
-// import static org.mockito.Mockito.*;
+import br.com.nubank.core.EventHandlerManager;
+import br.com.nubank.core.entity.AccountEvent;
+import br.com.nubank.core.entity.Event;
+import br.com.nubank.core.entity.EventType;
+import br.com.nubank.core.entity.TransactionEvent;
 
-// class FileReaderTest {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-//     AuthorizerUseCase authorizerUseCase = mock(AuthorizerUseCase.class);
-//     EventFileReader fileReader = new EventFileReader(authorizerUseCase);
+class FileReaderTest {
 
-//     @Test
-//     @DisplayName("Scenario 1: Read args method should throws an exception when the args is empty")
-//     void read_args_should_throws_an_exception_when_args_is_empty() {
-//         var exception = assertThrows(Exception.class, () -> fileReader.read(null));
+    EventHandlerManager eventHandlerManager = mock(EventHandlerManager.class);
+    EventFileReader eventFileReader = new EventFileReader(eventHandlerManager);
+    
+    @Test
+    void account_event_should_call_correct_instance() throws Exception {
+        eventFileReader.read("src/test/resources/files/operations_account");
 
-//         assertThat(exception.getMessage()).isEqualTo("it's missing required argument");
-//     }
+        ArgumentCaptor<EventType> eventTypeCaptor = ArgumentCaptor.forClass(EventType.class);
+        verify(eventHandlerManager, times(1)).setEventHandler(eventTypeCaptor.capture());
+        assertThat(eventTypeCaptor.getValue()).isEqualTo(EventType.ACCOUNT);
 
-//     @Test
-//     @DisplayName("Scenario 2: Read args method should read file and call authorizer use case")
-//     void read_args_should_read_file_and_call_authorizer_use_case() throws Exception {
-//         fileReader.read("src/test/resources/files/operations_two_lines");
+        ArgumentCaptor<Event<?>> eventCaptor = ArgumentCaptor.forClass(Event.class);
+        verify(eventHandlerManager, times(1)).execute(eventCaptor.capture());
+        assertThat(eventCaptor.getValue()).isInstanceOf(AccountEvent.class);
+    }
 
-//         verify(authorizerUseCase, times(2)).execute(anyString());
-//     }
+    @Test
+    void transaction_event_should_call_correct_instance() throws Exception {
+        eventFileReader.read("src/test/resources/files/operations_transaction");
 
-//     @Test
-//     @DisplayName("Scenario 3: Read args method should throws an exception when the args is empty")
-//     void read_args_should_throws_an_exception_when_args_is_invalid() {
-//         var exception = assertThrows(Exception.class, () -> fileReader.read("invalid"));
+        ArgumentCaptor<EventType> eventTypeCaptor = ArgumentCaptor.forClass(EventType.class);
+        verify(eventHandlerManager, times(1)).setEventHandler(eventTypeCaptor.capture());
+        assertThat(eventTypeCaptor.getValue()).isEqualTo(EventType.TRANSACTION);
 
-//         assertThat(exception.getMessage()).isEqualTo("invalid argument");
-//     }
-// }
+        ArgumentCaptor<Event<?>> eventCaptor = ArgumentCaptor.forClass(Event.class);
+        verify(eventHandlerManager, times(1)).execute(eventCaptor.capture());
+        assertThat(eventCaptor.getValue()).isInstanceOf(TransactionEvent.class);
+    }
+
+    @Test
+    void invalid_event_should_not_call_event_handler() throws Exception {
+        eventFileReader.read("src/test/resources/files/operations_invalid");
+
+        verify(eventHandlerManager, times(0)).setEventHandler(any());
+        verify(eventHandlerManager, times(0)).execute(any());
+    }
+
+    @Test
+    void invalid_file_should_thrown_an_exception() throws Exception {
+        var exception = assertThrows(Exception.class, () -> eventFileReader.read("invalid"));
+
+        assertThat(exception.getMessage()).isEqualTo("invalid argument");
+    }
+}

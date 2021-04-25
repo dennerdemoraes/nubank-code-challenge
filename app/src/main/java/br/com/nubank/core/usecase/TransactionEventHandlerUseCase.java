@@ -34,12 +34,12 @@ public class TransactionEventHandlerUseCase implements EventHandlerUseCase {
         rules.add(new AccountNotInitializedRule());
         rules.add(new CardNotActiveRule());
         rules.add(new InsuficientLimitRule());
-        rules.add(new HighFrequencySmallIntervalRule());
-        rules.add(new DoubleTransactionRule());
+        rules.add(new HighFrequencySmallIntervalRule(accountManager));
+        rules.add(new DoubleTransactionRule(accountManager));
         
         var violations = new ArrayList<String>();
         for (Rule rule : rules) {
-            var error = rule.execute(account, transaction, accountManager);
+            var error = rule.execute(account, transaction);
 
             if (Objects.nonNull(error))
                 violations.add(error);

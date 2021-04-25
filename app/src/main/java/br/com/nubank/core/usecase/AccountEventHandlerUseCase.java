@@ -29,6 +29,6 @@ public class AccountEventHandlerUseCase implements EventHandlerUseCase {
             return new AccountState(account, new ArrayList<>());
         }
 
-        return new AccountState(account, Collections.singletonList("account-already-initialized"));
+        return new AccountState(accountManager.getAccount(), Collections.singletonList("account-already-initialized"));
     }
 }

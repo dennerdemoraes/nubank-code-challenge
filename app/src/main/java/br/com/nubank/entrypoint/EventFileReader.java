@@ -57,7 +57,7 @@ public class EventFileReader {
         while (iterator.hasNext()) {
             event = JsonParser.parseJsonToObject(stream, iterator.next().getClass());
 
-            if (Objects.nonNull(event) && event.isValid()) {
+            if (Objects.nonNull(event) && Objects.nonNull(event.getPayload()) && event.isValid()) {
                 break;
             }
 
